@@ -85,6 +85,7 @@ export default function CelebrityDetailPage() {
       }
     };
     fetchCelebrity();
+    setCurrentRelated(0);
     window.scrollTo(0, 0);
   }, [id]);
 
@@ -112,8 +113,10 @@ export default function CelebrityDetailPage() {
   }
 
   const data = celebrity || FALLBACK_DATA;
-  const facts = FALLBACK_FACTS;
-  const relatedArticles = FALLBACK_RELATED;
+  const facts = data.facts && data.facts.length > 0 ? data.facts : FALLBACK_FACTS;
+  const relatedArticles = data.related && data.related.length > 0 
+    ? data.related.map((r, i) => ({ id: i, title: r.title, content: r.content, image: r.image })) 
+    : FALLBACK_RELATED;
   const currentArticle = relatedArticles[currentRelated];
 
   return (
@@ -195,10 +198,18 @@ export default function CelebrityDetailPage() {
 
             <div className="celeb-facts__images">
               <div className="celeb-facts__img celeb-facts__img--1">
-                <div className="celeb-facts__img-placeholder"></div>
+                {data.galleryImages && data.galleryImages[0] ? (
+                  <img src={data.galleryImages[0]} alt="Sự thật thú vị 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <div className="celeb-facts__img-placeholder"></div>
+                )}
               </div>
               <div className="celeb-facts__img celeb-facts__img--2">
-                <div className="celeb-facts__img-placeholder"></div>
+                {data.galleryImages && data.galleryImages[1] ? (
+                  <img src={data.galleryImages[1]} alt="Sự thật thú vị 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <div className="celeb-facts__img-placeholder"></div>
+                )}
               </div>
             </div>
           </div>
@@ -230,13 +241,25 @@ export default function CelebrityDetailPage() {
             <div className="celeb-related__slider">
               <div className="celeb-related__slider-track">
                 <div className="celeb-related__slide celeb-related__slide--main">
-                  <div className="celeb-related__slide-placeholder"></div>
+                  {currentArticle.image ? (
+                    <img src={currentArticle.image} alt={currentArticle.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="celeb-related__slide-placeholder"></div>
+                  )}
                 </div>
                 <div className="celeb-related__slide celeb-related__slide--overlay-1">
-                  <div className="celeb-related__slide-placeholder"></div>
+                  {relatedArticles[(currentRelated + 1) % relatedArticles.length]?.image ? (
+                    <img src={relatedArticles[(currentRelated + 1) % relatedArticles.length].image} alt="Xem thêm 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="celeb-related__slide-placeholder"></div>
+                  )}
                 </div>
                 <div className="celeb-related__slide celeb-related__slide--overlay-2">
-                  <div className="celeb-related__slide-placeholder"></div>
+                  {relatedArticles[(currentRelated + 2) % relatedArticles.length]?.image ? (
+                    <img src={relatedArticles[(currentRelated + 2) % relatedArticles.length].image} alt="Xem thêm 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="celeb-related__slide-placeholder"></div>
+                  )}
                 </div>
               </div>
 
