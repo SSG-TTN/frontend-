@@ -17,9 +17,9 @@
 }
 
 .header__inner {
-  max-width: 100%; /* Wider width stretching to the edges */
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 4%; /* Generous paddings on both edges */
+  padding: 0 20px;
   height: var(--header-height);
   display: flex;
   align-items: center;

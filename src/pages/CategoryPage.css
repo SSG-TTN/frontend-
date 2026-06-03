@@ -13,228 +13,127 @@
 }
 
 .category-page__inner {
-  max-width: var(--max-width);
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 var(--space-xl);
+  padding: 0 20px;
 }
 
-/* ===== STATE 1: CATEGORY LIST EXPLORER ===== */
-.category-explorer-intro {
-  text-align: center;
-  max-width: 800px;
-  margin: var(--space-xl) auto var(--space-3xl);
-}
-
-.explorer-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  background: var(--color-accent-soft);
-  border: 1px solid var(--color-accent-glow);
-  color: var(--color-accent);
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  margin-bottom: var(--space-md);
-  box-shadow: 0 0 15px var(--color-accent-soft);
-}
-
-.explorer-title {
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: 900;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-md);
-  line-height: 1.2;
-}
-
-.explorer-subtitle {
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-}
-
-/* Category Grid & Cards */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-xl);
-  margin-top: var(--space-3xl);
+/* ===== HORIZONTAL SCROLL CAROUSELS ===== */
+.category-scroll-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
   text-align: left;
 }
 
-.category-card-wrapper {
-  animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: var(--card-delay, 0s);
+/* --- Each Category Row --- */
+.category-scroll-row {
+  animation: rowReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--row-delay, 0s);
   opacity: 0;
-  transform: translateY(25px);
+  transform: translateY(20px);
 }
 
-@keyframes cardReveal {
+@keyframes rowReveal {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.category-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  aspect-ratio: 4 / 3.2;
-  cursor: pointer;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
-  transition: all var(--transition-slow);
-}
-
-.category-card__bg-wrapper {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.category-card__bg-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: brightness(0.7) contrast(1.05);
-}
-
-.category-card__gradient-overlay {
-  position: absolute;
-  inset: 0;
-  opacity: 0.85;
-  mix-blend-mode: multiply;
-  transition: opacity var(--transition-base);
-}
-
-.category-card__content {
-  position: relative;
-  z-index: 2;
-  padding: var(--space-xl);
-  color: var(--color-white);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-end;
-}
-
-.category-card__icon {
-  font-size: 2.2rem;
-  margin-bottom: var(--space-md);
-  align-self: flex-start;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.category-card__name {
-  font-family: var(--font-heading);
-  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-  font-weight: 800;
-  color: var(--color-white);
-  margin-bottom: var(--space-xs);
-  letter-spacing: -0.5px;
-}
-
-.category-card__desc {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.5;
-  margin-bottom: var(--space-lg);
-  font-weight: 300;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.category-card__footer {
+/* Row Header: icon + title + "Xem tất cả" — compact, ~33px */
+.category-scroll-row__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: var(--space-sm);
-  margin-top: auto;
+  margin-bottom: var(--space-sm);
+  padding: 0;
+  min-height: 33px;
 }
 
-.card-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
-}
-
-.card-badge--count {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--color-white);
-}
-
-.card-badge--coming {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.card-action-arrow {
+.category-scroll-row__left {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: 0.8rem;
+}
+
+.category-scroll-row__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.category-scroll-row__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.3px;
+}
+
+.category-scroll-row__see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
   font-weight: 700;
-  opacity: 0.8;
-  transition: transform var(--transition-fast), opacity var(--transition-fast);
-}
-
-/* Category Card Hovers */
-.category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg), 0 22px 40px rgba(0, 0, 0, 0.25);
-  border-color: var(--color-accent);
-}
-
-.category-card:hover .category-card__bg-img {
-  transform: scale(1.08);
-}
-
-.category-card:hover .category-card__gradient-overlay {
-  opacity: 0.75;
-}
-
-.category-card:hover .category-card__icon {
-  transform: translateY(-4px) scale(1.1);
-}
-
-.category-card:hover .card-action-arrow {
-  transform: translateX(4px);
-  opacity: 1;
   color: var(--color-accent);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
-/* Coming soon styling card */
-.category-card-wrapper--coming .category-card {
-  cursor: default;
-  border-color: var(--color-border-light);
+.category-scroll-row__see-all:hover {
+  background: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+  transform: translateX(3px);
 }
 
-.category-card-wrapper--coming .category-card__bg-img {
-  filter: grayscale(1) brightness(0.3);
+/* Horizontal Scroll Track */
+.category-scroll-row__track {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0 var(--space-sm);
 }
 
-.category-card-wrapper--coming .category-card:hover {
-  transform: none;
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-border-light);
+/* Hide scrollbar across all browsers */
+.category-scroll-row__track::-webkit-scrollbar {
+  display: none;
 }
 
-/* ===== STATE 2: CATEGORY DETAIL EXPLORER ===== */
+.category-scroll-row__track {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Empty state for categories with no figures */
+.category-scroll-row__empty {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 280px;
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-bg-light);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.category-scroll-row__empty span {
+  font-size: 1.4rem;
+}
+
+
 .category-detail-explorer {
   margin-top: var(--space-md);
 }
@@ -826,10 +725,6 @@
     grid-template-columns: 240px 1fr;
     gap: var(--space-lg);
   }
-
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 900px) {
@@ -869,13 +764,20 @@
 }
 
 @media (max-width: 640px) {
-  .category-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
+  .category-scroll-section {
+    gap: var(--space-xl);
   }
 
-  .category-card {
-    aspect-ratio: 16 / 10;
+  .category-scroll-row__header {
+    padding: 0;
+  }
+
+  .category-scroll-row__title {
+    font-size: 1rem;
+  }
+
+  .category-scroll-row__see-all span {
+    display: none;
   }
 
   .figures-grid {

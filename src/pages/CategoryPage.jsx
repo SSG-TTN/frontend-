@@ -4,6 +4,7 @@ import { Search, Grid, List, ArrowLeft, Calendar, Award, ArrowRight, Eye, Refres
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import FeaturedBooksSection from '../components/FeaturedBooksSlider/FeaturedBooksSection';
+import CategoryScrollCard from '../components/CategoryScrollCard/CategoryScrollCard';
 import localFigures from '../data/figures.json';
 import './CategoryPage.css';
 
@@ -49,7 +50,6 @@ const categories = [
     gradient: 'linear-gradient(135deg, #374151 0%, #4b5563 60%, #6b7280 100%)',
     bgImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop',
     icon: '💻',
-    comingSoon: true,
   },
   {
     id: 'kinh-doanh',
@@ -58,7 +58,6 @@ const categories = [
     gradient: 'linear-gradient(135deg, #111827 0%, #1f2937 60%, #374151 100%)',
     bgImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop',
     icon: '💼',
-    comingSoon: true,
   }
 ];
 
@@ -223,75 +222,59 @@ export default function CategoryPage() {
         <div className="category-page__inner">
           {/* STATE 1: Overall Categories Grid (No Category ID selected) */}
           {!categoryId && (
-            <div className="category-explorer-intro animate-fadeIn" id="category-explorer-intro">
-              <span className="explorer-badge">
-                <Compass size={14} />
-                CỔNG KHÁM PHÁ DANH NHÂN
-              </span>
-              <h1 className="explorer-title">Khám Phá Theo Lĩnh Vực</h1>
-              <p className="explorer-subtitle">
-                Tìm hiểu về lịch sử, tri thức và văn hóa nước Việt qua cuộc đời vĩ đại của các danh nhân, hiền tài kiệt xuất được phân chia khoa học theo từng nhóm lĩnh vực chuyên môn.
-              </p>
-              
-              {/* Main Categories Grid */}
-              <div className="category-grid" id="category-grid">
-                {categories.map((cat, index) => {
-                  // Count figures in this category
-                  const count = figures.filter(fig => {
-                    if (fig.category === cat.id) return true;
-                    if (fig.fields && Array.isArray(fig.fields)) {
-                      return fig.fields.some(field => slugify(field.name) === cat.id || 
-                             (cat.id === 'anh-hung' && slugify(field.name) === 'quan-su') ||
-                             (cat.id === 'lanh-tu' && slugify(field.name) === 'chinh-tri') ||
-                             (cat.id === 'khoa-hoc' && slugify(field.name) === 'khoa-hoc') ||
-                             (cat.id === 'nha-van' && slugify(field.name) === 'van-hoc'));
-                    }
-                    return false;
-                  }).length;
+            <div className="category-scroll-section animate-fadeIn" id="category-scroll-section">
+              {categories.map((cat, catIndex) => {
+                // Filter figures belonging to this category
+                const catFigures = figures.filter(fig => {
+                  if (fig.category === cat.id) return true;
+                  if (fig.fields && Array.isArray(fig.fields)) {
+                    return fig.fields.some(field => slugify(field.name) === cat.id || 
+                           (cat.id === 'anh-hung' && slugify(field.name) === 'quan-su') ||
+                           (cat.id === 'lanh-tu' && slugify(field.name) === 'chinh-tri') ||
+                           (cat.id === 'khoa-hoc' && slugify(field.name) === 'khoa-hoc') ||
+                           (cat.id === 'nha-van' && slugify(field.name) === 'van-hoc'));
+                  }
+                  return false;
+                });
 
-                  return (
-                    <div 
-                      key={cat.id} 
-                      className={`category-card-wrapper ${cat.comingSoon ? 'category-card-wrapper--coming' : ''}`}
-                      style={{ '--card-delay': `${index * 0.08}s` }}
-                    >
+                return (
+                  <div
+                    key={cat.id}
+                    className="category-scroll-row"
+                    id={`category-row-${cat.id}`}
+                    style={{ '--row-delay': `${catIndex * 0.1}s` }}
+                  >
+                    {/* Row Header */}
+                    <div className="category-scroll-row__header">
+                      <div className="category-scroll-row__left">
+                        <span className="category-scroll-row__icon">{cat.icon}</span>
+                        <h2 className="category-scroll-row__title">{cat.name}</h2>
+                      </div>
                       <Link
-                        to={cat.comingSoon ? '#' : `/danh-muc/${cat.id}`}
-                        className="category-card"
-                        id={`category-card-${cat.id}`}
-                        onClick={(e) => cat.comingSoon && e.preventDefault()}
+                        to={`/danh-muc/${cat.id}`}
+                        className="category-scroll-row__see-all"
                       >
-                        {/* Background landscape photo */}
-                        <div className="category-card__bg-wrapper">
-                          <img src={cat.bgImage} alt={cat.name} className="category-card__bg-img" />
-                          <div className="category-card__gradient-overlay" style={{ background: cat.gradient }}></div>
-                        </div>
-
-                        <div className="category-card__content">
-                          <span className="category-card__icon">{cat.icon}</span>
-                          <h3 className="category-card__name">{cat.name}</h3>
-                          <p className="category-card__desc">{cat.description}</p>
-                          
-                          <div className="category-card__footer">
-                            {cat.comingSoon ? (
-                              <span className="card-badge card-badge--coming">Sắp ra mắt</span>
-                            ) : (
-                              <>
-                                <span className="card-badge card-badge--count">
-                                  {loading ? '...' : `${count} nhân vật`}
-                                </span>
-                                <span className="card-action-arrow">
-                                  Khám phá <ArrowRight size={14} />
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                        <span>Xem tất cả</span>
+                        <ArrowRight size={14} />
                       </Link>
                     </div>
-                  );
-                })}
-              </div>
+
+                    {/* Horizontal Scroll Track */}
+                    <div className="category-scroll-row__track">
+                      {catFigures.length > 0 ? (
+                        catFigures.map(fig => (
+                          <CategoryScrollCard key={fig.id} figure={fig} />
+                        ))
+                      ) : (
+                        <div className="category-scroll-row__empty">
+                          <span>📚</span>
+                          <p>Đang cập nhật nhân vật cho danh mục này...</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -314,13 +297,11 @@ export default function CategoryPage() {
                       {categories.map((cat) => (
                         <Link
                           key={cat.id}
-                          to={cat.comingSoon ? '#' : `/danh-muc/${cat.id}`}
-                          className={`category-sidebar__link ${cat.id === categoryId ? 'category-sidebar__link--active' : ''} ${cat.comingSoon ? 'category-sidebar__link--coming' : ''}`}
-                          onClick={(e) => cat.comingSoon && e.preventDefault()}
+                          to={`/danh-muc/${cat.id}`}
+                          className={`category-sidebar__link ${cat.id === categoryId ? 'category-sidebar__link--active' : ''}`}
                         >
                           <span className="sidebar-link-icon">{cat.icon}</span>
                           <span className="sidebar-link-name">{cat.name}</span>
-                          {cat.comingSoon && <span className="sidebar-link-badge">Soon</span>}
                         </Link>
                       ))}
                     </nav>
